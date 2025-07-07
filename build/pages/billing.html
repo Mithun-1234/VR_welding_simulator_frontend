@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Users Data</title>
+    <!--     Fonts and icons     -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
+    <!-- Font Awesome Icons -->
+    <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+    <!-- Nucleo Icons -->
+    <link href="../assets/css/nucleo-icons.css" rel="stylesheet" />
+    <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
+    <!-- Main Styling -->
+    <link href="../assets/css/argon-dashboard-tailwind.css?v=1.0.1" rel="stylesheet" />
+    
+    <!-- Firebase SDK -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.23.0/firebase-app-compat.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.23.0/firebase-auth-compat.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.23.0/firebase-database-compat.min.js"></script>
+  </head>
+
+  <body class="m-0 font-sans text-base antialiased font-normal dark:bg-slate-900 leading-default bg-gray-50 text-slate-500">
+    <div class="absolute w-full dark:hidden min-h-75" style="background-color: #4F84C4;"></div>
+
+    <aside class="fixed inset-y-0 flex-wrap items-center justify-between block w-full p-0 my-4 overflow-y-auto antialiased transition-transform duration-200 -translate-x-full bg-white border-0 shadow-xl dark:shadow-none dark:bg-slate-850 max-w-64 ease-nav-brand z-990 xl:ml-6 rounded-2xl xl:left-0 xl:translate-x-0" aria-expanded="false">
+      <div class="h-19">
+        <i class="absolute top-0 right-0 p-4 opacity-50 cursor-pointer fas fa-times dark:text-white text-slate-400 xl:hidden" sidenav-close></i>
+        <a class="block px-8 py-6 m-0 text-sm whitespace-nowrap dark:text-white text-slate-700" target="_blank">
+          <img src="../assets/img/tata-logo.png" class="inline h-full max-w-full transition-all duration-200 dark:hidden ease-nav-brand max-h-8" alt="main_logo" />
+          <span class="ml-1 font-semibold transition-all duration-200 ease-nav-brand">VR Application Dashboard</span>
+        </a>
+      </div>
+
+      <hr class="h-px mt-0 bg-transparent bg-gradient-to-r from-transparent via-black/40 to-transparent dark:bg-gradient-to-r dark:from-transparent dark:via-white dark:to-transparent" />
+
+      <div class="items-center block w-auto max-h-screen overflow-auto h-sidenav grow basis-full">
+        <ul class="flex flex-col pl-0 mb-0">
+          <li class="mt-0.5 w-full">
+           <a class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors" href="../pages/dashboard.html">
+              <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                <i class="relative top-0 text-sm leading-normal text-blue-500 ni ni-tv-2"></i>
+              </div>
+              <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Dashboard</span>
+            </a>
+          </li>
+
+          <li class="mt-0.5 w-full">
+            <a class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors" href="../pages/tables.html">
+              <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                <i class="relative top-0 text-sm leading-normal text-orange-500 ni ni-calendar-grid-58"></i>
+              </div>
+              <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Users</span>
+            </a>
+          </li>
+
+          <li class="mt-0.5 w-full">
+            <a class="py-2.7 bg-blue-500/13 dark:text-white dark:opacity-80 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors" href="../pages/billing.html">
+              <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center fill-current stroke-0 text-center xl:p-2.5">
+                <i class="relative top-0 text-sm leading-normal text-emerald-500 ni ni-credit-card"></i>
+              </div>
+              <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">User Data</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="mx-4">
+        <div class="relative flex flex-col min-w-0 break-words bg-transparent border-0 shadow-none rounded-2xl bg-clip-border" sidenav-card>
+          <img class="w-1/2 mx-auto" src="../assets/img/illustrations/icon-documentation.svg" alt="logout illustration" />
+          <div class="flex-auto w-full p-4 pt-0 text-center">
+            <div class="transition-all duration-200 ease-nav-brand">
+              <h6 class="mb-0 dark:text-white text-slate-700">Logged in as Admin</h6>
+              <p class="text-xs admin-email dark:text-white/60 text-slate-500 mt-1"></p>
+            </div>
+          </div>
+        </div>
+        <button onclick="handleLogout()" class="inline-block w-full px-8 py-2 mt-2 text-xs font-bold leading-normal text-center text-black capitalize transition-all ease-in rounded-lg shadow-md bg-red-500 bg-150 hover:shadow-xs hover:-translate-y-px hover:bg-red-600">
+          Logout
+        </button>
+      </div>
+    </aside>
+
+    <main class="relative h-full max-h-screen transition-all duration-200 ease-in-out xl:ml-68 rounded-xl">
+      <!-- Navbar -->
+      <nav class="relative flex items-center justify-between px-6 py-4 mx-6 transition-all ease-in shadow-none duration-250 rounded-2xl bg-transparent" navbar-main navbar-scroll="false">
+        <h1 class="text-2xl font-bold text-white">Users Data</h1>
+        <button onclick="refreshData()" class="px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-600 transition-colors">
+          <i class="fas fa-sync-alt mr-2"></i>Refresh
+        </button>
+      </nav>
+
+      <div class="w-full px-6 py-6 mx-auto">
+        <!-- Loading State -->
+        <div id="loadingState" class="flex justify-center items-center py-12">
+          <div class="text-center">
+            <i class="fas fa-spinner fa-spin text-4xl text-blue-500 mb-4"></i>
+            <p class="text-lg text-slate-600">Loading user data...</p>
+          </div>
+        </div>
+
+        <!-- Error State -->
+        <div id="errorState" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          <div class="flex items-center">
+            <i class="fas fa-exclamation-triangle mr-2"></i>
+            <span id="errorMessage"></span>
+          </div>
+        </div>
+
+        <!-- Table Container -->
+        <div id="tableContainer" class="hidden flex flex-wrap -mx-3">
+          <div class="flex-none w-full max-w-full px-3">
+            <div class="relative flex flex-col min-w-0 mb-6 break-words bg-white border-0 shadow-xl rounded-2xl bg-clip-border">
+              <div class="p-6 pb-0 mb-0 flex justify-between items-center">
+                <h6 class="text-slate-700 text-lg font-bold">Users Data</h6>
+                <div class="text-sm text-slate-500">
+                  Total Users: <span id="totalUsers" class="font-semibold">0</span>
+                </div>
+              </div>
+              <div class="flex-auto px-0 pt-0 pb-2">
+                <div class="p-0 overflow-x-auto">
+                  <table class="items-center w-full mb-0 align-top border-collapse text-slate-500">
+                    <thead class="bg-gray-50">
+                      <tr>
+                        <th class="px-6 py-3 text-left text-xs font-bold uppercase text-slate-500">S.No</th>
+                        <th class="px-6 py-3 text-left text-xs font-bold uppercase text-slate-500">Name</th>
+                        <th class="px-6 py-3 text-left text-xs font-bold uppercase text-slate-500">Email</th>
+                        <th class="px-6 py-3 text-left text-xs font-bold uppercase text-slate-500">S1</th>
+                        <th class="px-6 py-3 text-left text-xs font-bold uppercase text-slate-500">S2</th>
+                        <th class="px-6 py-3 text-left text-xs font-bold uppercase text-slate-500">S3</th>
+                        <th class="px-6 py-3 text-left text-xs font-bold uppercase text-slate-500">Last Sign-in</th>
+                        <th class="px-6 py-3 text-left text-xs font-bold uppercase text-slate-500">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody id="userTableBody">
+                      <!-- Data will be populated here -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      // Firebase Configuration - Replace with your actual config
+      const firebaseConfig = {
+  apiKey: "AIzaSyCXBfwNRo6Cck-7JyOoZM0O3zZl8BJEW5g",
+  authDomain: "test-weld.firebaseapp.com",
+  databaseURL: "https://test-weld-default-rtdb.firebaseio.com",
+  projectId: "test-weld",
+  storageBucket: "test-weld.firebasestorage.app",
+  messagingSenderId: "851606889928",
+  appId: "1:851606889928:web:c3a2fbe218e7b559840cfd",
+  measurementId: "G-FE3YR32NP1"
+};
+
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      const auth = firebase.auth();
+      const database = firebase.database();
+
+      // Check authentication state
+      auth.onAuthStateChanged((user) => {
+        if (user) {
+          console.log('User is signed in:', user.email);
+          document.querySelector('.admin-email').textContent = user.email;
+          loadUserData();
+        } else {
+          console.log('User is not signed in');
+          // Redirect to login page
+          window.location.href = '../pages/sign-in.html';
+        }
+      });
+
+      // Load user data from Firebase Realtime Database
+      async function loadUserData() {
+        try {
+          showLoadingState();
+          
+          // Get authentication users first
+          const authUsersResponse = await fetch('http://localhost:5000/users');
+          const authUsersData = await authUsersResponse.json();
+          
+          if (!authUsersData.success) {
+            throw new Error(authUsersData.error || 'Failed to fetch auth users');
+          }
+          
+          // Get realtime database data
+          const snapshot = await database.ref('User').once('value');
+          const realtimeData = snapshot.val() || {};
+          
+          // Combine authentication data with realtime database data
+          const combinedData = authUsersData.users.map((authUser, index) => {
+            const realtimeUser = findUserInRealtimeData(realtimeData, authUser.email, authUser.uid);
+            
+            return {
+              sno: index + 1,
+              name: authUser.name !== 'N/A' ? authUser.name : (realtimeUser?.name || 'Unknown'),
+              email: authUser.email,
+              uid: authUser.uid,
+              s1: realtimeUser?.S1 || 'N/A',
+              s2: realtimeUser?.S2 || 'N/A',
+              s3: realtimeUser?.S3 || 'N/A',
+              lastSignIn: authUser.lastSignIn,
+              status: authUser.disabled ? 'Disabled' : (authUser.emailVerified ? 'Verified' : 'Unverified')
+            };
+          });
+          
+          displayUserData(combinedData);
+          
+        } catch (error) {
+          console.error('Error loading user data:', error);
+          showErrorState(error.message);
+        }
+      }
+
+      // Find user in realtime data by email or UID
+      function findUserInRealtimeData(realtimeData, email, uid) {
+        // Try to find by exact match first
+        for (const [key, userData] of Object.entries(realtimeData)) {
+          if (userData.email === email || key === uid) {
+            return userData;
+          }
+        }
+        
+        // If not found, try to find by email domain or partial match
+        for (const [key, userData] of Object.entries(realtimeData)) {
+          if (userData.email && email && userData.email.toLowerCase().includes(email.toLowerCase().split('@')[0])) {
+            return userData;
+          }
+        }
+        
+        return null;
+      }
+
+      // Display user data in table
+      function displayUserData(users) {
+        const tableBody = document.getElementById('userTableBody');
+        const totalUsersSpan = document.getElementById('totalUsers');
+        
+        tableBody.innerHTML = '';
+        totalUsersSpan.textContent = users.length;
+        
+        users.forEach(user => {
+          const row = document.createElement('tr');
+          row.className = 'hover:bg-gray-100';
+          
+          const statusClass = user.status === 'Verified' ? 'text-green-600' : 
+                             user.status === 'Disabled' ? 'text-red-600' : 'text-yellow-600';
+          
+          row.innerHTML = `
+            <td class="px-6 py-4 text-sm">${user.sno}</td>
+            <td class="px-6 py-4 text-sm font-medium">${user.name}</td>
+            <td class="px-6 py-4 text-sm">${user.email}</td>
+            <td class="px-6 py-4 text-sm font-semibold ${getScoreColor(user.s1)}">${user.s1}</td>
+            <td class="px-6 py-4 text-sm font-semibold ${getScoreColor(user.s2)}">${user.s2}</td>
+            <td class="px-6 py-4 text-sm font-semibold ${getScoreColor(user.s3)}">${user.s3}</td>
+            <td class="px-6 py-4 text-sm">${user.lastSignIn}</td>
+            <td class="px-6 py-4 text-sm ${statusClass}">${user.status}</td>
+          `;
+          
+          tableBody.appendChild(row);
+        });
+        
+        showTableContainer();
+      }
+
+      // Get color class for scores
+      function getScoreColor(score) {
+        if (score === 'N/A' || score === 'Non') return 'text-gray-400';
+        const numScore = parseInt(score);
+        if (numScore >= 90) return 'text-green-600';
+        if (numScore >= 80) return 'text-blue-600';
+        if (numScore >= 70) return 'text-yellow-600';
+        return 'text-red-600';
+      }
+
+      // Show loading state
+      function showLoadingState() {
+        document.getElementById('loadingState').classList.remove('hidden');
+        document.getElementById('errorState').classList.add('hidden');
+        document.getElementById('tableContainer').classList.add('hidden');
+      }
+
+      // Show error state
+      function showErrorState(message) {
+        document.getElementById('loadingState').classList.add('hidden');
+        document.getElementById('errorState').classList.remove('hidden');
+        document.getElementById('tableContainer').classList.add('hidden');
+        document.getElementById('errorMessage').textContent = message;
+      }
+
+      // Show table container
+      function showTableContainer() {
+        document.getElementById('loadingState').classList.add('hidden');
+        document.getElementById('errorState').classList.add('hidden');
+        document.getElementById('tableContainer').classList.remove('hidden');
+      }
+
+      // Refresh data
+      function refreshData() {
+        loadUserData();
+      }
+
+      // Handle logout
+      function handleLogout() {
+        auth.signOut().then(() => {
+          console.log('User signed out');
+          window.location.href = '../pages/sign-in.html';
+        }).catch((error) => {
+          console.error('Error signing out:', error);
+        });
+      }
+
+      // Real-time listener for database changes
+      database.ref('User').on('value', (snapshot) => {
+        console.log('Database updated, refreshing data...');
+        // Small delay to avoid too frequent updates
+        setTimeout(() => {
+          loadUserData();
+        }, 1000);
+      });
+    </script>
+
+    <!-- Plugin Scripts -->
+    <script src="../assets/js/plugins/perfect-scrollbar.min.js" async></script>
+    <script src="../assets/js/argon-dashboard-tailwind.js?v=1.0.1" async></script>
+  </body>
+</html>
